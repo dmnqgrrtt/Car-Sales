@@ -16,5 +16,20 @@ export const initialState = {
   };
 
   export const reducer = (state = initialState, action) => {
-      return state;
+      console.log(action.payload, 'from reducer')
+      switch(action.type){
+        case 'ADD_FEATURE':
+          return (
+              {...state,
+                car: {...state.car, 
+                    features: [...state.car.features, {name: action.payload, id: Date.now()}]
+                }
+              }
+          );
+        default:
+            return state;
+    
+      }
+      
+      
   }
