@@ -15,14 +15,28 @@ export const initialState = {
     ]
   };
 
+  const duplicates = (state, newFeature) => {
+      for( let i=0; i<state.car.features.length;i++) {
+          if(newFeature.id === state.car.features[i].id) {
+              return state.car.features;
+          }
+          
+      }
+    
+      return [...state.car.features, {name: newFeature.name, id: newFeature.id}];
+  }
+
   export const reducer = (state = initialState, action) => {
       console.log(action.payload, 'from reducer')
       switch(action.type){
         case 'ADD_FEATURE':
+          
           return (
               {...state,
                 car: {...state.car, 
-                    features: [...state.car.features, {name: action.payload, id: Date.now()}]
+                    // features: [...state.car.features, {name: action.payload.name, id: action.payload.id}]
+                    features: duplicates(state, action.payload)
+                    
                 }
               }
           );
