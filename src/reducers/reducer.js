@@ -15,7 +15,7 @@ export const initialState = {
     ]
   };
 
-  const duplicates = (state, newFeature) => {
+  const addFeatureNoDuplicates = (state, newFeature) => {
       for( let i=0; i<state.car.features.length;i++) {
           if(newFeature.id === state.car.features[i].id) {
               return state.car.features;
@@ -26,20 +26,36 @@ export const initialState = {
       return [...state.car.features, {name: newFeature.name, id: newFeature.id}];
   }
 
+  const removeFeature = (state, featureToRemove) => {
+    return state.car.features.filter(feature => {
+        if(feature.id === featureToRemove.id) {
+            return false;
+        }
+        return true;
+    })
+  }
+
   export const reducer = (state = initialState, action) => {
-      console.log(action.payload, 'from reducer')
       switch(action.type){
         case 'ADD_FEATURE':
           
           return (
               {...state,
                 car: {...state.car, 
-                    // features: [...state.car.features, {name: action.payload.name, id: action.payload.id}]
-                    features: duplicates(state, action.payload)
+                    
+                    features: addFeatureNoDuplicates(state, action.payload)
                     
                 }
               }
           );
+        case 'REMOVE_FEATURE':
+            return (
+                {...state,
+                    car: {...state.car,
+                        features: removeFeature(state, action.payload)
+                    }
+                }
+            );
         default:
             return state;
     
